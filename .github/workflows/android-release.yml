@@ -27,14 +27,18 @@ jobs:
       # 若配置了 BUILTIN_PASSCODE Secret，则注入"口令一键授权"内置配置
       # （口令 + API Key 仅存于 GitHub Secrets，仓库源码不含；生成文件不入库）
       - name: Inject builtin one-key config
-        if: "${{ secrets.BUILTIN_PASSCODE != '' }}"
         env:
           BUILTIN_PASSCODE: ${{ secrets.BUILTIN_PASSCODE }}
           DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
           MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
           VOICE_BOY: ${{ secrets.VOICE_BOY }}
           VOICE_GIRL: ${{ secrets.VOICE_GIRL }}
+        shell: bash
         run: |
+          if [ -z "${BUILTIN_PASSCODE}" ]; then
+            echo "未设置 BUILTIN_PASSCODE，跳过内置授权配置注入"
+            exit 0
+          fi
           mkdir -p app/src/main/assets
           cat > app/src/main/assets/builtin_config.json <<JSON
           {
@@ -44,8 +48,8 @@ jobs:
               "difyApiKey": "${DIFY_API_KEY}",
               "ttsProvider": "minimax",
               "ttsApiKey": "${MINIMAX_API_KEY}",
-              "voiceBoy": "${VOICE_BOY:-male-qn-qingse}",
-              "voiceGirl": "${VOICE_GIRL:-female-shaonv}",
+              "voiceBoy": "${VOICE_BOY}",
+              "voiceGirl": "${VOICE_GIRL}",
               "userName": "",
               "autoSpeak": true
             }
