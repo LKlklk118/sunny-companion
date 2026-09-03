@@ -33,16 +33,15 @@ ai-companion-android/
 ## 快速开始
 
 1. **Dify 云端**：已完成（应用「情感陪伴」，见 `docs/DIFY_CONFIG.md`）
-2. **本地联调**（可选，需 Android SDK）：
-   ```
-   gradle assembleDebug
-   ```
-3. **云端打包**：把本目录推到 GitHub 仓库 main 分支
-   - Actions 自动构建，产物在 Artifacts 下载
-   - 打 tag（`v1.0.0`）→ 自动发布 GitHub Releases 直链
+2. **GitHub 仓库**：https://github.com/LKlklk118/sunny-companion
+3. **下载 APK**（已发布 v1.0.0）：
+   - Release 页：https://github.com/LKlklk118/sunny-companion/releases/tag/v1.0.0
+   - 直链：https://github.com/LKlklk118/sunny-companion/releases/download/v1.0.0/app-debug.apk
+   - 国内加速下载（GitHub 慢时）：`https://ghfast.top/https://github.com/LKlklk118/sunny-companion/releases/download/v1.0.0/app-debug.apk`
 4. **手机安装**：APK 安装后打开 → 右上角 ⚙️ 填入：
-   - Dify Endpoint `https://api.dify.ai/v1` + API Key（见 local.secrets.properties）
-   - 语音平台 Key + 男/女音色 ID（注册 MiniMax 或 SiliconFlow 后填写）
+   - Dify Endpoint `https://api.dify.ai/v1` + API Key
+   - MiniMax API Key + 音色 ID（见 local.secrets.properties，仅本机，勿外传）
+   - 本地联调可用 `node tools/preview-server.js` 后访问 http://127.0.0.1:8765（浏览器模拟 App 的对话+朗读）
 
 ## 语音平台注册提示（二选一）
 
