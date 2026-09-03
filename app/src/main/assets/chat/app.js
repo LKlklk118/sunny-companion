@@ -282,6 +282,10 @@
     $('msgInput').addEventListener('keydown', function (e) {
       if (e.key === 'Enter') { e.preventDefault(); sendMessage(); }
     });
+    $('btnUnlock').addEventListener('click', doUnlock);
+    $('lockInput').addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); doUnlock(); }
+    });
     $('btnSpeakToggle').addEventListener('click', function () {
       state.autoSpeak = !state.autoSpeak;
       $('btnSpeakToggle').textContent = state.autoSpeak ? '🔊' : '🔇';
@@ -305,6 +309,58 @@
     } catch (e) { $('btnVoice').classList.add('hidden'); }
   }
 
+  // ---------- 口令解锁 ----------
+  function checkLock() {
+    if (!hasBridge() || !AndroidBridge.getLockState) { showApp(); return; }
+    var raw;
+    try { raw = AndroidBridge.getLockState(); } catch (e) { showApp(); return; }
+    var locked = false;
+    try { locked = !!(raw && JSON.parse(raw).locked); } catch (e) { locked = false; }
+    if (locked) {
+      $('lockPanel').classList.remove('hidden');
+      document.body.classList.add('locked');
+      $('lockInput').focus();
+      // 原生口令错误后保留锁页：错误提示由 unlock 处理
+    } else {
+      showApp();
+    }
+  }
+
+  function doUnlock() {
+    var code = $('lockInput').value.trim();
+    if (!code) { showLockErr('请输入口令'); return; }
+    if (!hasBridge() || !AndroidBridge.authorize) { showLockErr('当前环境不支持解锁'); return; }
+    var raw;
+    try { raw = AndroidBridge.authorize(code); } catch (e) { showLockErr('解锁失败，请重试'); return; }
+    var ok = false, msg = '';
+    try { var j = JSON.parse(raw); ok = !!j.ok; msg = j.msg || ''; } catch (e) {}
+    if (ok) {
+      // 解锁成功：清除锁态、重载配置、进入主界面
+      document.body.classList.remove('locked');
+      $('lockPanel').classList.add('hidden');
+      $('lockInput').value = '';
+      loadConfigIntoUi(JSON.parse(nativeCall('getConfigJson') || 'null') || null);
+      switchRole(state.role);
+      var hi = addMsg(roleInfo().avatar, roleInfo().name,
+        '解锁成功，欢迎回来～ 想和小七还是小妮聊聊呀？' + (state.role === 'girl' ? '🌸' : '☀️'));
+    } else {
+      showLockErr(msg || '口令错误，请重新输入');
+    }
+  }
+
+  function showApp() {
+    document.body.classList.remove('locked');
+    $('lockPanel').classList.add('hidden');
+  }
+
+  function showLockErr(msg) {
+    var e = $('lockErr');
+    e.textContent = msg || '口令错误，请重新输入';
+    e.classList.remove('hidden');
+    $('lockInput').classList.add('shake');
+    setTimeout(function () { $('lockInput').classList.remove('shake'); }, 500);
+  }
+
   // ---------- 初始化 ----------
   function init() {
     bind();
@@ -316,6 +372,7 @@
     // 让 Hero 先展示（默认未进入聊天态）
     document.body.classList.remove('has-chat');
     $('chatDate').classList.add('hidden');
+    checkLock();
   }
 
   if (document.readyState === 'loading') {

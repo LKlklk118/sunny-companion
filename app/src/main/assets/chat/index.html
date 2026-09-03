@@ -163,6 +163,38 @@
   <div class="deco deco-2" aria-hidden="true">⭐</div>
   <div class="deco deco-3" aria-hidden="true">🌸</div>
   <div class="deco deco-4" aria-hidden="true">☁️</div>
+
+  <!-- 口令解锁层（内置授权口令的版本显示） -->
+  <div id="lockPanel" class="lock-panel hidden">
+    <div class="lock-card">
+      <div class="sun-badge lock-sun" aria-hidden="true">
+        <svg viewBox="0 0 64 64" class="sun-svg">
+          <g class="sun-rays">
+            <line x1="32" y1="6"  x2="32" y2="14" />
+            <line x1="32" y1="50" x2="32" y2="58" />
+            <line x1="6"  y1="32" x2="14" y2="32" />
+            <line x1="50" y1="32" x2="58" y2="32" />
+            <line x1="13.6" y1="13.6" x2="19.3" y2="19.3" />
+            <line x1="44.7" y1="44.7" x2="50.4" y2="50.4" />
+            <line x1="13.6" y1="50.4" x2="19.3" y2="44.7" />
+            <line x1="44.7" y1="19.3" x2="50.4" y2="13.6" />
+          </g>
+          <circle cx="32" cy="32" r="17" class="sun-face" />
+          <circle cx="26" cy="29" r="2.2" class="sun-eye" />
+          <circle cx="38" cy="29" r="2.2" class="sun-eye" />
+          <path d="M25 37 Q32 43 39 37" class="sun-mouth" />
+          <circle cx="32" cy="36.5" r="3.2" fill="#FFE3C2" opacity=".8" />
+        </svg>
+      </div>
+      <div class="lock-lock">🔒</div>
+      <h2 class="lock-title">阳光专属陪伴</h2>
+      <p class="lock-sub">输入授权口令，一键解锁<br>双角色聊天 + 男女声朗读</p>
+      <input id="lockInput" class="lock-input" type="password" inputmode="text" placeholder="请输入授权口令" autocomplete="off">
+      <button class="lock-btn" id="btnUnlock">解锁进入</button>
+      <p class="lock-err hidden" id="lockErr">口令错误，请重新输入</p>
+      <p class="lock-tip">✨ 口令由分享人告知 · 仅限本人测试</p>
+    </div>
+  </div>
 </div>
 <script src="app.js"></script>
 </body>

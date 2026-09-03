@@ -176,6 +176,25 @@ class MainActivity : AppCompatActivity() {
         @JavascriptInterface
         fun getConfigJson(): String = gson.toJson(settings.load())
 
+        /** 是否被口令锁定（内置了授权口令但尚未解锁）。 */
+        @JavascriptInterface
+        fun getLockState(): String {
+            val locked = settings.isLocked()
+            val obj = JsonObject().apply { addProperty("locked", locked) }
+            return obj.toString()
+        }
+
+        /** 校验口令并一键授权：正确则写入全部内置配置。 */
+        @JavascriptInterface
+        fun authorize(passcode: String): String {
+            val ok = settings.tryUnlock(passcode ?: "")
+            val obj = JsonObject().apply {
+                addProperty("ok", ok)
+                addProperty("msg", if (ok) "解锁成功" else "口令错误，请重试")
+            }
+            return obj.toString()
+        }
+
         @JavascriptInterface
         fun notify(fn: String, json: String) {
             when (fn) {

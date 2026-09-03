@@ -24,6 +24,35 @@ jobs:
         with:
           gradle-version: '8.9'
 
+      # 若配置了 BUILTIN_PASSCODE Secret，则注入"口令一键授权"内置配置
+      # （口令 + API Key 仅存于 GitHub Secrets，仓库源码不含；生成文件不入库）
+      - name: Inject builtin one-key config
+        if: ${{ secrets.BUILTIN_PASSCODE != '' }}
+        env:
+          BUILTIN_PASSCODE: ${{ secrets.BUILTIN_PASSCODE }}
+          DIFY_API_KEY: ${{ secrets.DIFY_API_KEY }}
+          MINIMAX_API_KEY: ${{ secrets.MINIMAX_API_KEY }}
+          VOICE_BOY: ${{ secrets.VOICE_BOY }}
+          VOICE_GIRL: ${{ secrets.VOICE_GIRL }}
+        run: |
+          mkdir -p app/src/main/assets
+          cat > app/src/main/assets/builtin_config.json <<JSON
+          {
+            "passcode": "${BUILTIN_PASSCODE}",
+            "config": {
+              "difyEndpoint": "https://api.dify.ai/v1",
+              "difyApiKey": "${DIFY_API_KEY}",
+              "ttsProvider": "minimax",
+              "ttsApiKey": "${MINIMAX_API_KEY}",
+              "voiceBoy": "${VOICE_BOY:-male-qn-qingse}",
+              "voiceGirl": "${VOICE_GIRL:-female-shaonv}",
+              "userName": "",
+              "autoSpeak": true
+            }
+          }
+          JSON
+          echo "已注入内置授权配置（口令保护）"
+
       - name: Build Debug APK
         run: |
           if [ ! -f gradlew ]; then gradle wrapper --gradle-version 8.9; fi

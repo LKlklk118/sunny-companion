@@ -6,6 +6,9 @@ local.properties
 # 敏感配置（含 API Key，勿上传）
 local.secrets.properties
 
+# 内置授权配置（仅 CI 用 Secrets 生成，勿入库）
+app/src/main/assets/builtin_config.json
+
 # 本地测试音频 / 旧应用备份（不进仓库）
 backup/
 *.mp3
