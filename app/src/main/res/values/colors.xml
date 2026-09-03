@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sunny_orange">#FF9F45</color>
+    <color name="sunny_orange_dark">#F97316</color>
+    <color name="cream_pink">#FFB7C5</color>
+    <color name="cream_purple">#C9A7EB</color>
+    <color name="bg_cream">#FFF8EF</color>
+    <color name="bg_cream_light">#FFFDF9</color>
+    <color name="text_main">#4A3B32</color>
+    <color name="white">#FFFFFF</color>
+</resources>

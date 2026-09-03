@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>阳光专属陪伴</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app" class="theme-boy">
+
+  <!-- 顶部品牌区 -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <!-- 品牌：太阳 Logo + 名称 -->
+      <div class="brand">
+        <div class="sun-badge" aria-hidden="true">
+          <svg viewBox="0 0 64 64" class="sun-svg">
+            <g class="sun-rays">
+              <line x1="32" y1="6"  x2="32" y2="14" />
+              <line x1="32" y1="50" x2="32" y2="58" />
+              <line x1="6"  y1="32" x2="14" y2="32" />
+              <line x1="50" y1="32" x2="58" y2="32" />
+              <line x1="13.6" y1="13.6" x2="19.3" y2="19.3" />
+              <line x1="44.7" y1="44.7" x2="50.4" y2="50.4" />
+              <line x1="13.6" y1="50.4" x2="19.3" y2="44.7" />
+              <line x1="44.7" y1="19.3" x2="50.4" y2="13.6" />
+            </g>
+            <circle cx="32" cy="32" r="17" class="sun-face" />
+            <circle cx="26" cy="29" r="2.2" class="sun-eye" />
+            <circle cx="38" cy="29" r="2.2" class="sun-eye" />
+            <path d="M25 37 Q32 43 39 37" class="sun-mouth" />
+            <circle cx="32" cy="36.5" r="3.2" fill="#FFE3C2" opacity=".8" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">阳光专属陪伴</h1>
+          <p class="brand-sub">你的暖心小太阳 · 随时在线</p>
+        </div>
+      </div>
+
+      <!-- 右侧操作 -->
+      <div class="top-actions">
+        <button class="icon-btn" id="btnSettings" title="设置" aria-label="设置">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- 角色切换条 -->
+    <div class="rolebar">
+      <div class="role-switch" id="roleSwitch" role="tablist" aria-label="选择陪伴角色">
+        <button class="role-btn active" data-role="boy" role="tab" aria-selected="true">
+          <span class="role-emoji">👦</span> 男友 · 小七
+        </button>
+        <button class="role-btn" data-role="girl" role="tab" aria-selected="false">
+          <span class="role-emoji">👧</span> 闺蜜 · 小妮
+        </button>
+      </div>
+      <button class="icon-btn speak-toggle" id="btnSpeakToggle" title="自动朗读回复" aria-label="自动朗读回复">🔊</button>
+    </div>
+  </header>
+
+  <!-- 消息区 -->
+  <main id="chatArea">
+    <!-- 开场空态（聊起来后自动隐藏） -->
+    <section class="hero" id="hero">
+      <div class="hero-sun">
+        <svg viewBox="0 0 64 64" class="sun-svg big">
+          <g class="sun-rays">
+            <line x1="32" y1="6"  x2="32" y2="16" />
+            <line x1="32" y1="48" x2="32" y2="58" />
+            <line x1="6"  y1="32" x2="16" y2="32" />
+            <line x1="48" y1="32" x2="58" y2="32" />
+            <line x1="12.6" y1="12.6" x2="19.7" y2="19.7" />
+            <line x1="44.3" y1="44.3" x2="51.4" y2="51.4" />
+            <line x1="12.6" y1="51.4" x2="19.7" y2="44.3" />
+            <line x1="44.3" y1="19.7" x2="51.4" y2="12.6" />
+          </g>
+          <circle cx="32" cy="32" r="18" class="sun-face" />
+          <circle cx="25.5" cy="28.5" r="2.4" class="sun-eye" />
+          <circle cx="38.5" cy="28.5" r="2.4" class="sun-eye" />
+          <path d="M24.5 36.5 Q32 43 39.5 36.5" class="sun-mouth" />
+          <circle cx="32" cy="37.5" r="3.6" fill="#FFE3C2" opacity=".85" />
+        </svg>
+      </div>
+
+      <h2 class="hero-title">今天想和谁聊聊呀？</h2>
+      <p class="hero-desc">选一位专属陪伴，随时倾听你的心情</p>
+
+      <div class="hero-cards">
+        <button class="role-card card-boy" data-role="boy">
+          <span class="card-avatar">👦</span>
+          <span class="card-name">男友 · 小七</span>
+          <span class="card-tag">☀️ 阳光温柔大男孩</span>
+        </button>
+        <button class="role-card card-girl" data-role="girl">
+          <span class="card-avatar">👧</span>
+          <span class="card-name">闺蜜 · 小妮</span>
+          <span class="card-tag">🌸 元气软萌好闺蜜</span>
+        </button>
+      </div>
+
+      <div class="hero-quicks">
+        <button class="quick-chip">今天上班好累，求安慰</button>
+        <button class="quick-chip">最近有点失眠焦虑</button>
+        <button class="quick-chip">想听你说说开心的事</button>
+      </div>
+    </section>
+
+    <div class="chat-date hidden" id="chatDate">☁️ 和 TA 的专属时光开始啦</div>
+    <div id="messages"></div>
+    <div id="typing" class="typing hidden">
+      <div class="bubble bot-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+    </div>
+  </main>
+
+  <!-- 底部输入区 -->
+  <footer class="inputbar">
+    <button class="icon-btn mic-btn" id="btnVoice" title="语音输入" aria-label="语音输入">🎤</button>
+    <div class="input-wrap">
+      <input id="msgInput" type="text" placeholder="和小七聊聊今天的心情吧～" autocomplete="off" enterkeyhint="send">
+    </div>
+    <button class="send-btn" id="btnSend">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      发送
+    </button>
+  </footer>
+
+  <!-- 设置面板 -->
+  <div id="settingsPanel" class="panel hidden">
+    <div class="panel-card">
+      <div class="panel-head">
+        <h3>⚙️ 设置</h3>
+        <button class="icon-btn" id="btnSettingsClose" aria-label="关闭设置">✕</button>
+      </div>
+      <div class="panel-body">
+        <label>Dify 接口地址</label>
+        <input id="cfgEndpoint" type="text" placeholder="https://api.dify.ai/v1">
+        <label>Dify API Key</label>
+        <input id="cfgDifyKey" type="password" placeholder="app-xxxx">
+        <label>语音服务（minimax / siliconflow）</label>
+        <input id="cfgTtsProvider" type="text" placeholder="minimax">
+        <label>语音 API Key</label>
+        <input id="cfgTtsKey" type="password" placeholder="语音平台 Key">
+        <label>男生音色 ID（小七）</label>
+        <input id="cfgVoiceBoy" type="text" placeholder="male-xxx">
+        <label>女生音色 ID（小妮）</label>
+        <input id="cfgVoiceGirl" type="text" placeholder="female-xxx">
+        <label>你的昵称（可选）</label>
+        <input id="cfgUserName" type="text" placeholder="让 TA 记住怎么称呼你">
+        <div class="row-check">
+          <label class="check-label"><input id="cfgAutoSpeak" type="checkbox"> 收到回复自动朗读</label>
+        </div>
+        <button class="primary-btn" id="btnSaveConfig">保存设置</button>
+        <p class="hint">密钥仅保存在本机。⚠️ 请勿把含密钥的 App 公开发布。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 漂浮装饰 -->
+  <div class="deco deco-1" aria-hidden="true">☁️</div>
+  <div class="deco deco-2" aria-hidden="true">⭐</div>
+  <div class="deco deco-3" aria-hidden="true">🌸</div>
+  <div class="deco deco-4" aria-hidden="true">☁️</div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SunnyCompanion" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/bg_cream</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@color/bg_cream</item>
+        <item name="colorPrimary">@color/sunny_orange</item>
+        <item name="colorPrimaryDark">@color/sunny_orange_dark</item>
+        <item name="colorAccent">@color/cream_purple</item>
+        <item name="android:navigationBarColor">@color/bg_cream</item>
+    </style>
+</resources>
