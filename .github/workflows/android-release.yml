@@ -51,7 +51,7 @@ jobs:
               "voiceBoy": "${VOICE_BOY}",
               "voiceGirl": "${VOICE_GIRL}",
               "userName": "",
-              "autoSpeak": true
+              "autoSpeak": false
             }
           }
           JSON
