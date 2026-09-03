@@ -22,3 +22,6 @@ backup/
 /captures
 .externalNativeBuild
 .cxx
+
+# 本地下载的构建产物
+dist/
