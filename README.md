@@ -34,10 +34,10 @@ ai-companion-android/
 
 1. **Dify 云端**：已完成（应用「情感陪伴」，见 `docs/DIFY_CONFIG.md`）
 2. **GitHub 仓库**：https://github.com/LKlklk118/sunny-companion
-3. **下载 APK**（已发布 v1.0.0）：
-   - Release 页：https://github.com/LKlklk118/sunny-companion/releases/tag/v1.0.0
-   - 直链：https://github.com/LKlklk118/sunny-companion/releases/download/v1.0.0/app-debug.apk
-   - 国内加速下载（GitHub 慢时）：`https://ghfast.top/https://github.com/LKlklk118/sunny-companion/releases/download/v1.0.0/app-debug.apk`
+3. **下载 APK**（最新 v1.2.0，口令 `19980118`）：
+   - Release 页：https://github.com/LKlklk118/sunny-companion/releases/tag/v1.2.0
+   - 直链：https://github.com/LKlklk118/sunny-companion/releases/download/v1.2.0/app-debug.apk
+   - 国内加速下载（GitHub 慢时）：`https://ghfast.top/https://github.com/LKlklk118/sunny-companion/releases/download/v1.2.0/app-debug.apk`
 4. **手机安装**：APK 安装后打开 → 右上角 ⚙️ 填入：
    - Dify Endpoint `https://api.dify.ai/v1` + API Key
    - MiniMax API Key + 音色 ID（见 local.secrets.properties，仅本机，勿外传）
