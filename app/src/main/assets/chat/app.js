@@ -5,12 +5,24 @@
   var state = {
     role: 'boy',           // boy=小七 girl=小妮
     busy: false,
-    autoSpeak: true,
+    autoSpeak: false,      // 默认不自动朗读，仅点击"朗读"才播放
     config: null
   };
 
   var BOY = { name: '小七', avatar: '👦', tag: '男友' };
   var GIRL = { name: '小妮', avatar: '👧', tag: '闺蜜' };
+
+  // 文本清洗（不硬切字数，避免把句子腰斩）：
+  // 模型按"一句一行"输出短句（配合提示词：每句≤10字、句末用标点），
+  // 这里只去掉多余空行/首尾空白；个别超长句由 CSS 自然折行兜底。
+  function wrapText(s) {
+    if (!s) return '';
+    var text = String(s)
+      .replace(/^\s+|\s+$/g, '')   // 去首尾空白
+      .replace(/[ \t]+\n/g, '\n')  // 行尾空格
+      .replace(/\n{2,}/g, '\n');   // 压缩连续空行
+    return text;
+  }
 
   // ---------- 原生桥 ----------
   function hasBridge() {
@@ -99,10 +111,10 @@
       row.innerHTML = '<div class="avatar">' + (avatar || me.avatar) + '</div>';
     }
     var bubbleWrap = document.createElement('div');
-    bubbleWrap.style.cssText = 'display:flex;flex-direction:column;align-items:' + (isUser ? 'flex-end' : 'flex-start');
+    bubbleWrap.className = 'bubble-wrap ' + (isUser ? 'right' : 'left');
     var bubble = document.createElement('div');
     bubble.className = 'bubble ' + (isUser ? 'user-bubble' : 'bot-bubble');
-    bubble.textContent = text;
+    bubble.textContent = wrapText(text);
     bubbleWrap.appendChild(bubble);
     if (!isUser) {
       var tools = document.createElement('div');
@@ -112,7 +124,7 @@
       ttsBtn.textContent = '🔊 朗读';
       ttsBtn.dataset.text = text;
       ttsBtn.addEventListener('click', function () {
-        // 朗读最新内容：流式完成前读已生成部分，完成后读全文
+        // 仅点击时朗读完整文本（流式完成前读已生成部分）
         var txt = ttsBtn.dataset.text || text || '';
         if (txt.trim()) nativeCall('speak', txt, state.role);
         markPlaying(ttsBtn);
@@ -171,7 +183,7 @@
       window.__acc.row = addMsg(me.avatar, me.name, '', false);
     }
     var bubble = window.__acc.row.querySelector('.bubble');
-    bubble.textContent = window.__acc.raw;
+    bubble.textContent = wrapText(window.__acc.raw);
     // 同步朗读按钮的文本（流式中点朗读读已生成部分）
     var tts = window.__acc.row.querySelector('.tts-btn');
     if (tts) tts.dataset.text = window.__acc.raw;
@@ -181,24 +193,25 @@
   function onDone(fullText) {
     var finalText = (fullText || '').trim()
       || ((window.__acc && window.__acc.raw) || '').trim();
-    // 完成时确保朗读按钮持有完整文本
+    // 完成时确保朗读按钮持有完整文本；气泡按短句分行清洗
     if (window.__acc && window.__acc.row) {
       var tts = window.__acc.row.querySelector('.tts-btn');
       if (tts && finalText) tts.dataset.text = finalText;
+      var bubble = window.__acc.row.querySelector('.bubble');
+      if (bubble) bubble.textContent = wrapText(finalText);
     }
     window.__acc = null;
     setTyping(false);
     state.busy = false;
-    if (state.autoSpeak && finalText) {
-      nativeCall('speak', finalText, state.role);
-    }
+    // 不自动朗读：仅当用户点击"🔊 朗读"才播放一遍
   }
 
-  function onError(msg) {
+  // 统一错误提示气泡（第 5 项要求：失败/超时统一文案）
+  function onError() {
     window.__acc = null;
     setTyping(false);
     state.busy = false;
-    addMsg('⚠️', '提示', (msg || '出错了，请检查网络或右上角设置') + '（⚙️ 可重新配置）', false);
+    addMsg('⚠️', '提示', '请求超时，请重试~', false);
   }
 
   // ---------- TTS / 语音输入状态 ----------
@@ -210,8 +223,9 @@
     if (window.__stopPlaying && (st === 'done' || st === 'error' || st === 'stopped')) {
       window.__stopPlaying();
     }
-    if (st === 'error' && msg) {
-      addMsg('⚠️', '提示', msg, false);
+    if (st === 'error') {
+      // 朗读失败统一提示
+      addMsg('⚠️', '提示', '请求超时，请重试~', false);
     }
   }
 
@@ -232,7 +246,8 @@
   function loadConfigIntoUi(cfg) {
     if (!cfg) return;
     state.config = cfg;
-    state.autoSpeak = cfg.autoSpeak !== false;
+    // 默认关闭自动朗读（跟随内置/用户配置，若从未设置则为 false）
+    state.autoSpeak = cfg.autoSpeak === true;
     $('cfgEndpoint').value = cfg.difyEndpoint || '';
     $('cfgDifyKey').value = cfg.difyApiKey || '';
     $('cfgTtsProvider').value = cfg.ttsProvider || 'minimax';
@@ -240,7 +255,7 @@
     $('cfgVoiceBoy').value = cfg.voiceBoy || '';
     $('cfgVoiceGirl').value = cfg.voiceGirl || '';
     $('cfgUserName').value = cfg.userName || '';
-    $('cfgAutoSpeak').checked = cfg.autoSpeak !== false;
+    $('cfgAutoSpeak').checked = cfg.autoSpeak === true;
     $('btnSpeakToggle').textContent = state.autoSpeak ? '🔊' : '🔇';
   }
 

@@ -109,6 +109,7 @@ body {
 }
 #messages { display: flex; flex-direction: column; gap: 14px; max-width: 620px; margin: 0 auto; }
 .row { display: flex; align-items: flex-end; gap: 9px; animation: pop .25s ease; }
+/* 标准聊天气泡布局：用户靠右，AI 靠左 */
 .row.user { justify-content: flex-end; }
 .avatar {
   width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
@@ -119,6 +120,7 @@ body {
 .bubble {
   max-width: 78%; padding: 12px 16px; border-radius: 20px;
   font-size: 16.5px; line-height: 1.6; word-break: break-word; white-space: pre-wrap;
+  text-align: left;   /* 气泡内文字一律左对齐 */
 }
 .bot-bubble {
   background: #fff; color: var(--text); border-bottom-left-radius: 6px;
@@ -129,7 +131,11 @@ body {
   border-bottom-right-radius: 6px; box-shadow: 0 4px 16px rgba(255,140,60,.28);
 }
 .theme-girl .user-bubble { background: linear-gradient(135deg,#F9AEC9,#E29BE0); box-shadow: 0 4px 16px rgba(225,120,190,.28); }
-.bubble-tools { display: flex; gap: 2px; margin-top: 8px; align-items: center; }
+/* 气泡容器：AI 靠左、用户靠右（与 .row.user 配合），内部文字左对齐 */
+.bubble-wrap { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.bubble-wrap.right { align-items: flex-end; }
+.bubble-wrap .bubble:empty { display: none; }   /* 空文本不占位（修复顶部空气泡） */
+.bubble-tools { display: flex; gap: 2px; margin-top: 6px; align-items: center; }
 .tts-btn {
   border: none; background: transparent; font-size: 13px; cursor: pointer;
   color: var(--text-soft); padding: 4px 8px; border-radius: 10px;
