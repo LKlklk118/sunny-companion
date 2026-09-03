@@ -171,6 +171,30 @@ const server = http.createServer((req, res) => {
     }
   }
 
+  // ====================================================
+  // Dify 原生协议代理：手机 App 把 Dify Endpoint 设为
+  //   http://<本机IP>:8765/dify/v1
+  // 则 App 请求 /dify/v1/chat-messages 会被转发到
+  //   https://api.dify.ai/v1/chat-messages（SSE 流式透传）
+  // 用途：手机无法直连 Dify 国际云时，改走本机中转。
+  // ====================================================
+  if (urlPath.startsWith('/dify/') && req.method === 'POST') {
+    let body = '';
+    req.on('data', c => body += c);
+    req.on('end', () => {
+      // 请求自带 Authorization 则透传，否则用本地密钥兜底
+      const auth = req.headers['authorization']
+        || 'Bearer ' + (SECRETS.DIFY_API_KEY || '');
+      const target = 'https://api.dify.ai' + urlPath.replace(/^\/dify/, '');
+      forwardTo(res, target, {
+        'Content-Type': req.headers['content-type'] || 'application/json',
+        'Authorization': auth,
+        'Accept': req.headers['accept'] || 'text/event-stream'
+      }, 'POST', body, true);
+    });
+    return;
+  }
+
   // 对话代理
   if (urlPath === '/api/chat' && req.method === 'POST') {
     let body = '';
